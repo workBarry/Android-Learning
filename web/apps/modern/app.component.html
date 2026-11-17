@@ -1,0 +1,11 @@
+<main class="page" data-testid="modern-app" aria-label="新版網頁功能">
+  <label class="field" for="message">要傳送的文字</label>
+  <input id="message" data-testid="message-input" name="message" [ngModel]="message()" (ngModelChange)="message.set($event)" autocomplete="off">
+  <div class="actions">
+    <button type="button" data-testid="open-chrome" (click)="openChrome()">用 Chrome 開啟網頁</button>
+    <button type="button" data-testid="open-legacy" (click)="openLegacy()">開啟舊網頁並傳送文字</button>
+    <button type="button" data-testid="show-toast" (click)="showToast()">顯示 Android 提示</button>
+  </div>
+  <p class="reply" data-testid="legacy-reply" aria-live="polite">舊網頁回覆：{{ legacyReply() }}</p>
+  @if (error()) {<p class="error" role="alert" data-testid="error-message">{{ error() }}</p>}
+</main>

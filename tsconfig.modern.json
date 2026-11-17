@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "outDir": "./out-tsc/modern", "types": [] },
+  "files": ["web/apps/modern/main.ts"],
+  "include": ["web/**/*.d.ts"]
+}

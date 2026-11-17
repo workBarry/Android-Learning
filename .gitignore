@@ -1,0 +1,12 @@
+node_modules/
+.delivery/
+.angular/
+dist/
+.test-dist/
+android/.gradle/
+android/.kotlin/
+android/local.properties
+android/**/build/
+*.log
+.idea/
+.vscode/

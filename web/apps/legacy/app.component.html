@@ -1,0 +1,10 @@
+<main class="page" data-testid="legacy-app" aria-label="舊網頁功能">
+  <p class="field">新版傳來的文字</p>
+  <p class="received" data-testid="received-message">{{ receivedMessage() }}</p>
+  <label class="field" for="reply">回覆新版網頁</label>
+  <input id="reply" data-testid="reply-input" name="reply" [ngModel]="reply()" (ngModelChange)="reply.set($event)" [disabled]="returning()" autocomplete="off">
+  <div class="actions">
+    <button type="button" data-testid="return-result" [disabled]="returning()" (click)="returnResult()">{{ returning() ? '正在返回…' : '完成並返回' }}</button>
+  </div>
+  @if (error()) {<p class="error" role="alert" data-testid="error-message">{{ error() }}</p>}
+</main>

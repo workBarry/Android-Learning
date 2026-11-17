@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "outDir": "./out-tsc/legacy", "types": [] },
+  "files": ["web/apps/legacy/main.ts"],
+  "include": ["web/**/*.d.ts"]
+}
