@@ -16,7 +16,7 @@ export function sendToAndroid(event: string, payload: Record<string, unknown>): 
 
   let response: string | null;
   if (window.AndroidApp) {
-    // 步驟 2：Android 已注入這個物件，接下來進入 NativeBridge.java。
+    // 步驟 2：Android 已注入這個物件，接下來進入 NativeBridge.kt。
     response = window.AndroidApp.sendEvent(event, json);
   } else {
     // 僅供電腦預覽：由同源外框模擬原生動作，不能驗證 Android API。

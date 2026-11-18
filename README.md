@@ -16,15 +16,17 @@ Android 是外殼，上方顯示返回與「目前：新版／舊版」。新版
 
 1. `web/apps/modern/app.component.ts`、`.html`：三個按鈕與回覆顯示。
 2. `web/shared/bridge.ts` 的 `sendToAndroid(event, payload)`：`AndroidApp.sendEvent(event, JSON.stringify(payload))`。
-3. `android/app/src/main/java/dev/learning/navigation/NativeBridge.java`：document-start 注入 → prompt 接收 → `switch(event)`。
-4. 同目錄 `MainActivity.java`：`openChrome()`、`openLegacyWeb()`、`showToast()`、`returnToModern(JSONObject result)`。
+3. `android/app/src/main/kotlin/dev/learning/navigation/NativeBridge.kt`：document-start 注入 → prompt 接收 → `when (event)`。
+4. 同目錄 `MainActivity.kt`：`openChrome()`、`openLegacyWeb()`、`showToast()`、`returnToModern(result: JSONObject)`。
 5. `web/apps/legacy/app.component.ts`、`.html`：讀取 context、送出回覆。
+
+Android 主畫面的工具列、返回按鈕、頁面標題與新版 WebView 位於 [activity_main.xml](android/app/src/main/res/layout/activity_main.xml)。`MainActivity` 負責綁定事件，以及在原本的容器中加入或移除舊版 WebView。
 
 Console／Logcat 的五個標記：`WEB_SEND` → `NATIVE_RECEIVE` → `LEGACY_RECEIVE` → `NATIVE_RETURN` → `MODERN_RECEIVE`。逐條解說見 [程式與資料流程](docs/code-flow.md)；原案依據見 [來源對照](docs/source-reference.md)。
 
 ## 建置與執行
 
-在專案根目錄執行；電腦需符合 `package.json` 要求的 Node.js，Android 建置另需 JDK 與 Android SDK。
+在專案根目錄執行；電腦需符合 `package.json` 要求的 Node.js，Android 建置另需 JDK 17 與 Android SDK。
 
 ```powershell
 npm install

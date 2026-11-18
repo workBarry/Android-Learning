@@ -2,12 +2,12 @@
 
 先看新版的 `app.component.html`，找到按鈕呼叫的方法，再照下面流程往下讀。新版與舊版各有自己的 component，兩邊只共用簡單的 `web/shared/bridge.ts` 送出函式。
 
-Android 的程式位於 `android/app/src/main/java/dev/learning/navigation/`，只有兩個主要檔案：
+Android 的程式位於 `android/app/src/main/kotlin/dev/learning/navigation/`，只有兩個主要檔案：
 
-- `NativeBridge.java`：建立 Web 入口、接收訊息、解析 JSON、`switch(event)` 分派。
-- `MainActivity.java`：外殼標題與返回，以及四個實際動作方法。
+- `NativeBridge.kt`：建立 Web 入口、接收訊息、解析 JSON、`when (event)` 分派。
+- `MainActivity.kt`：外殼標題與返回，以及四個實際動作方法。
 
-## 共同入口：send → receive → switch
+## 共同入口：send → receive → dispatch
 
 ```text
 Web 按鈕
@@ -16,7 +16,7 @@ Web 按鈕
   → AndroidApp.sendEvent(event, JSON.stringify(payload))
   → document-start 注入的函式呼叫 window.prompt(...)
   → NativeBridge 的 onJsPrompt 接收、解析           [NATIVE_RECEIVE]
-  → switch(event)
+  → when (event)
   → MainActivity 對應方法
 ```
 
@@ -27,7 +27,7 @@ Web 按鈕
 ```text
 modern 按「用 Chrome 開啟網頁」：openChrome()
   → sendToAndroid('OPEN_URL', {url})
-  → NativeBridge：case 'OPEN_URL'
+  → NativeBridge："OPEN_URL"
   → MainActivity.openChrome(url)
   → Android Intent 指定 Chrome
 ```
@@ -47,7 +47,7 @@ sendToAndroid('OPEN_IN_PAGE_WEBVIEW', {
 ```text
 modern 按「開啟舊網頁並傳送文字」：openLegacy()
   → sendToAndroid(...)                             [WEB_SEND]
-  → NativeBridge：case 'OPEN_IN_PAGE_WEBVIEW'       [NATIVE_RECEIVE]
+  → NativeBridge："OPEN_IN_PAGE_WEBVIEW"       [NATIVE_RECEIVE]
   → MainActivity.openLegacyWeb(context)
   → context JSON 放入經網址編碼的 query
   → 顯示 legacy WebView，原 modern WebView 保留
@@ -62,14 +62,14 @@ https://appassets.androidplatform.net/assets/web/modern/index.html
 https://appassets.androidplatform.net/assets/web/legacy/index.html
 ```
 
-`openLegacyWeb(JSONObject context)` 使用 `Uri.Builder.appendQueryParameter("context", context.toString())` 建立網址。`context` 先轉成 JSON，再交給網址參數的編碼處理，所以中文、空白、`&` 與引號不會被當成另一個參數。舊頁用 `URLSearchParams(...).get('context')` 讀取；它會處理網址解碼，再 `JSON.parse()` 還原物件。不要把 message 直接接在未編碼的網址後方，也不要重複解碼。
+`openLegacyWeb(context: JSONObject)` 使用 `Uri.Builder.appendQueryParameter("context", context.toString())` 建立網址。`context` 先轉成 JSON，再交給網址參數的編碼處理，所以中文、空白、`&` 與引號不會被當成另一個參數。舊頁用 `URLSearchParams(...).get('context')` 讀取；它會處理網址解碼，再 `JSON.parse()` 還原物件。不要把 message 直接接在未編碼的網址後方，也不要重複解碼。
 
 ## 3. 顯示原生 Toast
 
 ```text
 modern 按「顯示 Android 提示」：showToast()
   → sendToAndroid('SHOW_TOAST', {message})          [WEB_SEND]
-  → NativeBridge：case 'SHOW_TOAST'                [NATIVE_RECEIVE]
+  → NativeBridge："SHOW_TOAST"                [NATIVE_RECEIVE]
   → MainActivity.showToast(message)
   → Android Toast
 ```
@@ -81,14 +81,14 @@ modern 按「顯示 Android 提示」：showToast()
 ```text
 legacy 按「完成並返回」：returnResult()
   → sendToAndroid('LEARNING_RETURN_RESULT', {message}) [WEB_SEND]
-  → NativeBridge：case 'LEARNING_RETURN_RESULT'     [NATIVE_RECEIVE]
+  → NativeBridge："LEARNING_RETURN_RESULT"     [NATIVE_RECEIVE]
   → MainActivity.returnToModern(result)            [NATIVE_RETURN]
   → modern.evaluateJavascript(...)
   → window.onLegacyResult({message})               [MODERN_RECEIVE]
   → 更新新版畫面，關閉 legacy，顯示 modern
 ```
 
-新版 component 建立時先註冊 `window.onLegacyResult`，讓 Android 可以呼叫。`NativeBridge.dispatch()` 從 payload 取出 message，建立 `JSONObject result`，再呼叫 `MainActivity.returnToModern(JSONObject result)`。Activity 以 JSON 物件序列化結果後，放入要執行的 JavaScript，例如：
+新版 component 建立時先註冊 `window.onLegacyResult`，讓 Android 可以呼叫。`NativeBridge.dispatch()` 從 payload 取出 message，建立 `result: JSONObject`，再呼叫 `MainActivity.returnToModern(result: JSONObject)`。Activity 以 JSON 物件序列化結果後，放入要執行的 JavaScript，例如：
 
 ```js
 window.onLegacyResult({"message":"舊頁已收到資料"});

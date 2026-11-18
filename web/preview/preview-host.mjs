@@ -1,4 +1,4 @@
-// 這個檔案只讓電腦瀏覽器能預覽；真正的 Android 分派在 NativeBridge.java。
+// 這個檔案只讓電腦瀏覽器能預覽；真正的 Android 分派在 NativeBridge.kt。
 export function createPreviewBridge(modernSource, actions) {
   let legacySource = null;
   const fail = error => JSON.stringify({ ok: false, error });
