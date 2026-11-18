@@ -15,7 +15,7 @@ Android 是外殼，上方顯示返回與「目前：新版／舊版」。新版
 ## 從這些位置順序讀
 
 1. `web/apps/modern/app.component.ts`、`.html`：三個按鈕與回覆顯示。
-2. `web/shared/bridge.ts` 的 `sendToAndroid(event, payload)`：`MliOSSApp.sendEvent(event, JSON.stringify(payload))`。
+2. `web/shared/bridge.ts` 的 `sendToAndroid(event, payload)`：`AndroidApp.sendEvent(event, JSON.stringify(payload))`。
 3. `android/app/src/main/java/dev/learning/navigation/NativeBridge.java`：document-start 注入 → prompt 接收 → `switch(event)`。
 4. 同目錄 `MainActivity.java`：`openChrome()`、`openLegacyWeb()`、`showToast()`、`returnToModern(JSONObject result)`。
 5. `web/apps/legacy/app.component.ts`、`.html`：讀取 context、送出回覆。

@@ -13,7 +13,7 @@
 ## 本次保留的概念
 
 - 新 Web／舊 Web 各自是獨立應用，由 Android 控制目前顯示哪個 WebView。
-- Web 使用 `MliOSSApp.sendEvent(event, JSON.stringify(data))`；底層採 document-start／prompt 通道。
+- 學習版 Web 使用 `AndroidApp.sendEvent(event, JSON.stringify(data))`，保留原案的 document-start／prompt 通道。上表記載的是原專案的名稱。
 - `OPEN_URL`、`OPEN_IN_PAGE_WEBVIEW` 沿用原案事件名稱。
 - Android 能執行原生動作，也能用 `evaluateJavascript()` 呼叫 Web 函式。
 

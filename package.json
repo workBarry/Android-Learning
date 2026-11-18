@@ -9,7 +9,9 @@
     "preview": "node scripts/preview.mjs",
     "android:build": "node scripts/android-build.mjs",
     "android:smoke": "node scripts/android-smoke.mjs",
-    "test": "node scripts/test.mjs"
+    "test": "node scripts/test.mjs",
+    "start:modern": "ng serve modern --port 4200",
+    "start:legacy": "ng serve legacy --port 4201"
   },
   "dependencies": {
     "@angular/common": "21.2.7",

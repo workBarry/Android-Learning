@@ -13,7 +13,7 @@ Android 的程式位於 `android/app/src/main/java/dev/learning/navigation/`，�
 Web 按鈕
   → component 的按鈕方法
   → bridge.ts：sendToAndroid(event, payload)         [WEB_SEND]
-  → MliOSSApp.sendEvent(event, JSON.stringify(payload))
+  → AndroidApp.sendEvent(event, JSON.stringify(payload))
   → document-start 注入的函式呼叫 window.prompt(...)
   → NativeBridge 的 onJsPrompt 接收、解析           [NATIVE_RECEIVE]
   → switch(event)

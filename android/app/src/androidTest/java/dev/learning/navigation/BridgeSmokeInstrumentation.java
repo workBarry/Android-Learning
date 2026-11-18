@@ -63,7 +63,7 @@ public final class BridgeSmokeInstrumentation extends Instrumentation {
         await("新版 Angular 與 Bridge 啟動", () -> truth(evaluate(modern,
                 "!!document.querySelector('[data-testid=\"open-legacy\"]')"
                         + " && typeof window.onLegacyResult==='function'"
-                        + " && typeof window.MliOSSApp?.sendEvent==='function'")));
+                        + " && typeof window.AndroidApp?.sendEvent==='function'")));
         step("新版頁面、原生 Bridge 與原版 onLegacyResult 已準備完成");
 
         // 包一層計數器觀察結果；仍然呼叫 App 原本的 callback 更新真正畫面。
@@ -154,13 +154,13 @@ public final class BridgeSmokeInstrumentation extends Instrumentation {
     }
 
     private JSONObject bridge(WebView webView, String event, JSONObject payload) throws Exception {
-        Object raw = evaluate(webView, "window.MliOSSApp.sendEvent(" + JSONObject.quote(event) + ","
+        Object raw = evaluate(webView, "window.AndroidApp.sendEvent(" + JSONObject.quote(event) + ","
                 + JSONObject.quote(payload.toString()) + ")");
         return new JSONObject(String.valueOf(raw));
     }
 
     private void sendWithoutWaiting(WebView webView, String event, JSONObject payload) {
-        String script = "window.MliOSSApp.sendEvent(" + JSONObject.quote(event) + ","
+        String script = "window.AndroidApp.sendEvent(" + JSONObject.quote(event) + ","
                 + JSONObject.quote(payload.toString()) + ")";
         // 發送後頁面會關閉，因此等待新版的真正結果，不等待已銷毀頁面的 JS callback。
         runOnMainSync(() -> webView.evaluateJavascript(script, null));

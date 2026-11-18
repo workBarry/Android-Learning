@@ -2,7 +2,7 @@ export interface LegacyResult { message: string; }
 
 declare global {
   interface Window {
-    MliOSSApp?: { sendEvent(event: string, json: string): string | null };
+    AndroidApp?: { sendEvent(event: string, json: string): string | null };
     onLegacyResult?: (data: LegacyResult) => void;
     learningPreview?: { sendEvent(source: Window, event: string, json: string): string | null };
   }
@@ -15,9 +15,9 @@ export function sendToAndroid(event: string, payload: Record<string, unknown>): 
   console.info('WEB_SEND', event, payload);
 
   let response: string | null;
-  if (window.MliOSSApp) {
+  if (window.AndroidApp) {
     // 步驟 2：Android 已注入這個物件，接下來進入 NativeBridge.java。
-    response = window.MliOSSApp.sendEvent(event, json);
+    response = window.AndroidApp.sendEvent(event, json);
   } else {
     // 僅供電腦預覽：由同源外框模擬原生動作，不能驗證 Android API。
     let preview: Window['learningPreview'];

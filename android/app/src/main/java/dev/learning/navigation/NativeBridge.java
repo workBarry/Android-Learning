@@ -26,7 +26,7 @@ final class NativeBridge {
             + "if(packet.length>8500)return JSON.stringify({ok:false,error:'訊息過長，請縮短後重試'});"
             + "return window.prompt('" + PREFIX + "'+packet,'');"
             + "}});"
-            + "Object.defineProperty(window,'MliOSSApp',{value:api,writable:false,configurable:false});"
+            + "Object.defineProperty(window,'AndroidApp',{value:api,writable:false,configurable:false});"
             + "})();";
 
     private final MainActivity activity;
@@ -40,7 +40,7 @@ final class NativeBridge {
         this.webView = webView;
         this.expectedPath = expectedPath;
         // 1. 在網頁程式執行前注入 sendEvent，只允許固定的本機 origin。
-        webView.removeJavascriptInterface("MliOSSApp");
+        webView.removeJavascriptInterface("AndroidApp");
         scriptHandler = WebViewCompat.addDocumentStartJavaScript(
                 webView, SCRIPT, Collections.singleton(MainActivity.ORIGIN));
         webView.setWebChromeClient(new WebChromeClient() {

@@ -62,11 +62,11 @@ test('外開網址與原生提示使用各自的處理分支', () => {
 
 test('共用 sendEvent 只送原始事件與 JSON，且將原生拒絕顯示為錯誤', () => {
   let captured;
-  globalThis.window = { MliOSSApp: { sendEvent(event, json) { captured = { event, data: JSON.parse(json) }; return '{"ok":true}'; } } };
+  globalThis.window = { AndroidApp: { sendEvent(event, json) { captured = { event, data: JSON.parse(json) }; return '{"ok":true}'; } } };
   try {
     sendToAndroid('OPEN_IN_PAGE_WEBVIEW', openData);
     assert.deepEqual(captured, { event: 'OPEN_IN_PAGE_WEBVIEW', data: openData });
-    window.MliOSSApp.sendEvent = () => '{"ok":false,"error":"Chrome 未安裝"}';
+    window.AndroidApp.sendEvent = () => '{"ok":false,"error":"Chrome 未安裝"}';
     assert.throws(() => sendToAndroid('OPEN_URL', { url: 'https://example.com' }), /Chrome 未安裝/);
   } finally { delete globalThis.window; }
 });
